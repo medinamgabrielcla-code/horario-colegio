@@ -26,7 +26,7 @@
       background: linear-gradient(180deg, #0b1120 0%, #0f172a 100%);
       color: var(--text);
       margin: 0;
-      padding: 16px 14px 20px;
+      padding: 16px 14px 24px;
       display: flex;
       justify-content: center;
       min-height: 100vh;
@@ -73,10 +73,10 @@
     /* LOGIN */
     .login-card {
       background: var(--surface);
-      padding: 36px 24px;
+      padding: 32px 24px;
       border-radius: var(--radius);
       text-align: center;
-      margin-top: 40px;
+      margin-top: 10px;
       border: 1px solid var(--border);
       box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     }
@@ -108,9 +108,67 @@
       background: var(--primary);
       color: white;
       transition: 0.2s;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
     }
 
     .btn:active { transform: scale(0.98); background: var(--primary-dark); }
+
+    /* TARJETA CONTACTO PARA COMPRAR ACCESO */
+    .contact-card {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px dashed #38bdf8;
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.05);
+    }
+
+    .contact-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .contact-desc {
+      font-size: 14px;
+      color: #cbd5e1;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .contact-badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #7dd3fc;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .btn-contact {
+      background: #0284c7;
+      color: white;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .btn-contact:active { background: #0369a1; }
 
     /* CABECERA APP */
     .app-header {
@@ -198,7 +256,7 @@
       cursor: pointer;
     }
 
-    /* TARJETAS */
+    /* TARJETAS DE CONTENIDO */
     .card {
       background: var(--surface);
       border-radius: var(--radius);
@@ -310,10 +368,11 @@
       background: rgba(239, 68, 68, 0.15);
       border: 1px solid #ef4444;
       color: #fca5a5;
-      padding: 12px;
+      padding: 14px;
       border-radius: 12px;
       font-size: 14px;
       margin-top: 12px;
+      line-height: 1.4;
     }
 
     /* PIE DE PÁGINA (ALL RIGHTS RESERVED + LOGO + DEVELOPED BY) */
@@ -367,17 +426,37 @@
     <div id="liveClock" class="live-clock">--:--:--</div>
   </div>
 
-  <!-- VISTA LOGIN -->
-  <div id="loginView" class="login-card">
-    <div style="font-size: 50px; margin-bottom: 12px;">🎒</div>
-    <h2 style="margin: 0 0 6px;">Horario Escolar</h2>
-    <p style="color: var(--muted); margin: 0 0 20px;">Ingresa tu WhatsApp registrado para continuar:</p>
-    <input type="tel" id="telInput" class="input-field" placeholder="Ej: 3001234567" inputmode="numeric">
-    <button class="btn" onclick="iniciarSesion()">Consultar Horario</button>
-    <div id="loginMsg" class="alerta" style="display:none;"></div>
+  <!-- VISTA 1: LOGIN Y REGISTRO -->
+  <div id="loginView" style="display:flex; flex-direction:column; gap:16px;">
+    
+    <div class="login-card">
+      <div style="font-size: 50px; margin-bottom: 12px;">🎒</div>
+      <h2 style="margin: 0 0 6px;">Horario Escolar</h2>
+      <p style="color: var(--muted); margin: 0 0 20px;">Ingresa tu WhatsApp registrado para continuar:</p>
+      <input type="tel" id="telInput" class="input-field" placeholder="Ej: 3001234567" inputmode="numeric">
+      <button class="btn" onclick="iniciarSesion()">Consultar Horario</button>
+      <div id="loginMsg" class="alerta" style="display:none;"></div>
+    </div>
+
+    <!-- TARJETA INFORMATIVA PARA COMPRAR ACCESO -->
+    <div class="contact-card">
+      <div class="contact-title">
+        <span>✨ ¿Aún no tienes acceso a la app?</span>
+      </div>
+      <p class="contact-desc">
+        Para activar tu número y tener tu horario escolar automatizado (válido para 2 celulares):
+      </p>
+      <div>
+        <span class="contact-badge">Contacto: <b>Gabo Medina</b> (Salón <b>8B</b>)</span>
+      </div>
+      <a href="mailto:medinamgabriel.cla@gmail.com?subject=Solicitud%20de%20Acceso%20-%20App%20Horario%20Escolar&body=Hola%20Gabo,%20quiero%20adquirir%20el%20acceso%20para%20la%20app%20de%20horarios.%20Mi%20n%C3%BAmero%20es:%20" class="btn-contact">
+        ✉️ Contactar vía Correo
+      </a>
+    </div>
+
   </div>
 
-  <!-- VISTA PRINCIPAL -->
+  <!-- VISTA 2: HORARIO PRINCIPAL -->
   <div id="appView" style="display:none; flex-direction:column; gap:16px;">
     
     <div class="app-header">
@@ -451,7 +530,6 @@
   <footer class="app-footer">
     <span>All rights reserved &copy; 2026</span>
     <div class="developer-line">
-      <!-- Asegúrate de tener el logo guardado como logo.png en tu repositorio -->
       <img src="logo.png" alt="DemonFlex180 Logo" class="dev-icon" onerror="this.style.display='none'">
       <span>Developed by DemonFlex180</span>
     </div>
@@ -460,7 +538,7 @@
 </div>
 
 <script>
-  // PEGA AQUÍ LA URL COMPLETA DE TU APPS SCRIPT
+  // PEGA AQUÍ LA URL COMPLETA DE TU APPS SCRIPT TERMINADA EN /exec
   const API_URL = "https://script.google.com/macros/s/AKfycbzoEqcgd141baKF4SMn0vkwGOUK4pZAdVnpPoZ8u5uB5yr7a9I7hWc4huIOmDdB9dG2/exec";
 
   const GRADOS = ["6A", "6B", "7A", "7B", "8A", "8B", "9A", "9B", "10A", "10B", "11A", "11B"];
@@ -546,7 +624,7 @@
         document.getElementById("appView").style.display = "flex";
         actualizarHorario();
       } else {
-        msg.innerText = data.mensaje || "Acceso denegado.";
+        msg.innerHTML = `${data.mensaje || "Acceso denegado."}<br><br>💡 Para comprar acceso habla con <b>Gabo Medina en 8B</b> o escribe a: <a href="mailto:medinamgabriel.cla@gmail.com" style="color:#7dd3fc; font-weight:bold;">medinamgabriel.cla@gmail.com</a>`;
         msg.style.display = "block";
       }
     } catch (e) {
@@ -633,7 +711,7 @@
     }
   }
 
-  // CONSULTA DINÁMICA DE CUALQUIER DÍA
+  // CONSULTA DE FECHA ESPECÍFICA
   async function consultarOtraFecha(fechaStr) {
     if (!fechaStr) return;
     const card = document.getElementById("cardCustom");

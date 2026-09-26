@@ -3,32 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Horario Escolar</title>
+  <title>Horario Escolar Oficial</title>
   <style>
     :root {
       --primary: #2563eb;
       --primary-dark: #1d4ed8;
-      --primary-light: #eff6ff;
       --accent: #f59e0b;
-      --accent-light: #fffbeb;
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --text: #0f172a;
-      --muted: #64748b;
-      --border: #e2e8f0;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-      --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-card: #243248;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: #334155;
       --radius: 20px;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(180deg, #0b1120 0%, #0f172a 100%);
       color: var(--text);
       margin: 0;
-      padding: 20px 16px 40px;
+      padding: 16px 14px 40px;
       display: flex;
       justify-content: center;
       min-height: 100vh;
@@ -39,59 +36,65 @@
       max-width: 480px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 16px;
     }
 
-    /* PANTALLA LOGIN */
+    /* BARRA EN VIVO CON RELOJ Y FECHA */
+    .live-bar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .live-date {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: capitalize;
+    }
+
+    .live-clock {
+      font-size: 16px;
+      font-weight: 800;
+      color: #38bdf8;
+      font-variant-numeric: tabular-nums;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    /* LOGIN */
     .login-card {
       background: var(--surface);
-      padding: 32px 24px;
+      padding: 36px 24px;
       border-radius: var(--radius);
-      box-shadow: var(--shadow-md);
       text-align: center;
       margin-top: 40px;
       border: 1px solid var(--border);
-    }
-
-    .icon-header {
-      font-size: 54px;
-      margin-bottom: 12px;
-      display: inline-block;
-    }
-
-    .login-card h2 {
-      font-size: 24px;
-      font-weight: 800;
-      margin: 0 0 8px;
-      letter-spacing: -0.5px;
-    }
-
-    .login-card p {
-      color: var(--muted);
-      font-size: 16px;
-      margin: 0 0 24px;
-      line-height: 1.4;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     }
 
     .input-field {
       width: 100%;
       padding: 16px;
       font-size: 22px;
-      font-weight: 600;
+      font-weight: 700;
       text-align: center;
       border: 2px solid var(--border);
       border-radius: 14px;
       outline: none;
-      transition: all 0.2s ease;
-      background: #fdfdfd;
+      background: #0b1120;
+      color: #fff;
       margin-bottom: 16px;
-      letter-spacing: 1px;
     }
 
-    .input-field:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
-    }
+    .input-field:focus { border-color: var(--primary); }
 
     .btn {
       width: 100%;
@@ -101,33 +104,24 @@
       border: none;
       border-radius: 14px;
       cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .btn-primary {
       background: var(--primary);
       color: white;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      transition: 0.2s;
     }
 
-    .btn-primary:active { transform: scale(0.98); background: var(--primary-dark); }
+    .btn:active { transform: scale(0.98); background: var(--primary-dark); }
 
-    /* PANTALLA PRINCIPAL */
+    /* CABECERA APP */
     .app-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 4px 6px;
+      padding: 0 4px;
     }
 
     .user-greeting {
       font-size: 20px;
       font-weight: 800;
-      color: var(--text);
       margin: 0;
     }
 
@@ -136,23 +130,16 @@
       border: none;
       color: var(--muted);
       font-size: 14px;
-      font-weight: 600;
       cursor: pointer;
       text-decoration: underline;
     }
 
-    /* SELECTOR DE GRADOS TIPO PÍLDORAS */
-    .grades-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
+    /* SELECTOR DE GRADOS DESLIZABLE */
     .grades-scroll {
       display: flex;
       gap: 8px;
       overflow-x: auto;
-      padding-bottom: 6px;
+      padding-bottom: 4px;
       scrollbar-width: none;
     }
 
@@ -168,70 +155,49 @@
       font-size: 15px;
       border: 1px solid var(--border);
       cursor: pointer;
-      transition: all 0.2s ease;
     }
 
     .grade-chip.active {
-      background: var(--text);
-      color: white;
-      border-color: var(--text);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
     }
 
-    /* TARJETAS DE DÍA */
+    /* TARJETAS */
     .card {
       background: var(--surface);
       border-radius: var(--radius);
       padding: 22px;
-      box-shadow: var(--shadow-sm);
       border: 1px solid var(--border);
-      position: relative;
-      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
 
-    .card::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 6px;
-    }
+    .card-today { border-top: 5px solid #38bdf8; }
+    .card-tomorrow { border-top: 5px solid var(--accent); }
 
-    .card-today::before { background: var(--primary); }
-    .card-tomorrow::before { background: var(--accent); }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .card-title {
-      font-size: 13px;
+    .card-label {
+      font-size: 12px;
       font-weight: 800;
-      letter-spacing: 0.8px;
+      letter-spacing: 1px;
       text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    .card-today .card-title { color: var(--primary); }
-    .card-tomorrow .card-title { color: var(--accent); }
-
-    .cycle-badge {
-      font-size: 26px;
+    .badge-cycle {
+      font-size: 30px;
       font-weight: 900;
-      letter-spacing: -0.5px;
       margin-bottom: 14px;
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
+      letter-spacing: -0.5px;
     }
 
-    /* LISTA DE MATERIAS (CHIPS) */
+    .badge-today { color: #38bdf8; }
+    .badge-tomorrow { color: var(--accent); }
+
     .subjects-list {
       display: flex;
       flex-wrap: wrap;
@@ -240,47 +206,50 @@
     }
 
     .subject-pill {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      color: #f1f5f9;
       padding: 8px 14px;
       border-radius: 10px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
-      color: #1e293b;
     }
 
-    /* NOTAS Y RECORDATORIOS */
+    .receso-box {
+      background: rgba(148, 163, 184, 0.1);
+      border: 1px dashed var(--border);
+      padding: 16px;
+      border-radius: 12px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.4;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     .note-box {
       border-radius: 12px;
       padding: 12px 14px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 8px;
       margin-top: 10px;
-    }
-
-    .note-today {
-      background: var(--primary-light);
-      color: var(--primary-dark);
-    }
-
-    .note-tomorrow {
-      background: var(--accent-light);
-      color: #92400e;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #fde68a;
     }
 
     .alerta {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      color: #dc2626;
-      padding: 14px;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid #ef4444;
+      color: #fca5a5;
+      padding: 12px;
       border-radius: 12px;
-      font-size: 15px;
-      font-weight: 600;
-      margin-top: 14px;
-      text-align: left;
+      font-size: 14px;
+      margin-top: 12px;
     }
 
     .loading-pulse {
@@ -298,19 +267,23 @@
 
 <div class="app-container">
 
-  <!-- VISTA 1: INICIO DE SESIÓN -->
+  <!-- BARRA TIEMPO REAL -->
+  <div class="live-bar">
+    <div id="liveDate" class="live-date">Cargando fecha...</div>
+    <div id="liveClock" class="live-clock">--:--:--</div>
+  </div>
+
+  <!-- VISTA LOGIN -->
   <div id="loginView" class="login-card">
-    <div class="icon-header">🎒</div>
-    <h2>Mi Horario Escolar</h2>
-    <p>Ingresa tu número de WhatsApp para consultar las clases:</p>
-    
-    <input type="tel" id="telInput" class="input-field" placeholder="3001234567" inputmode="numeric">
-    <button class="btn btn-primary" onclick="iniciarSesion()">Ver Mi Horario</button>
-    
+    <div style="font-size: 50px; margin-bottom: 12px;">🎒</div>
+    <h2 style="margin: 0 0 6px;">Horario Escolar</h2>
+    <p style="color: var(--muted); margin: 0 0 20px;">Ingresa tu WhatsApp registrado para continuar:</p>
+    <input type="tel" id="telInput" class="input-field" placeholder="Ej: 3001234567" inputmode="numeric">
+    <button class="btn" onclick="iniciarSesion()">Consultar Horario</button>
     <div id="loginMsg" class="alerta" style="display:none;"></div>
   </div>
 
-  <!-- VISTA 2: APLICACIÓN PRINCIPAL -->
+  <!-- VISTA PRINCIPAL -->
   <div id="appView" style="display:none; flex-direction:column; gap:16px;">
     
     <div class="app-header">
@@ -318,29 +291,23 @@
       <button class="btn-logout" onclick="cerrarSesion()">Cambiar número</button>
     </div>
 
-    <!-- SELECTOR DE GRADOS HORIZONTAL (6A a 11B) -->
-    <div class="grades-wrapper">
-      <div class="grades-scroll" id="gradesScroll"></div>
-    </div>
+    <!-- PÍLDORAS DE GRADOS -->
+    <div class="grades-scroll" id="gradesScroll"></div>
 
     <!-- TARJETA HOY -->
     <div class="card card-today">
-      <div class="card-header">
-        <span class="card-title">☀️ Clases de Hoy</span>
-      </div>
-      <div id="hoyCiclo" class="cycle-badge">...</div>
-      <div id="hoyMaterias" class="subjects-list"></div>
-      <div id="hoyNota" class="note-box note-today" style="display:none;"></div>
+      <div class="card-label">☀️ Estado de Hoy</div>
+      <div id="hoyCiclo" class="badge-cycle badge-today">Cargando...</div>
+      <div id="hoyContenido"></div>
+      <div id="hoyNota" class="note-box" style="display:none;"></div>
     </div>
 
-    <!-- TARJETA MAÑANA -->
+    <!-- TARJETA PRÓXIMO DÍA HÁBIL -->
     <div class="card card-tomorrow">
-      <div class="card-header">
-        <span class="card-title">🎒 Para el próximo día lectivo</span>
-      </div>
-      <div id="mananaCiclo" class="cycle-badge">...</div>
-      <div id="mananaMaterias" class="subjects-list"></div>
-      <div id="mananaNota" class="note-box note-tomorrow" style="display:none;"></div>
+      <div class="card-label" id="labelManana">🎒 Próximo Día Lectivo</div>
+      <div id="mananaCiclo" class="badge-cycle badge-tomorrow">Cargando...</div>
+      <div id="mananaContenido" class="subjects-list"></div>
+      <div id="mananaNota" class="note-box" style="display:none;"></div>
     </div>
 
   </div>
@@ -348,11 +315,21 @@
 </div>
 
 <script>
-  // PEGA AQUÍ LA URL DE TU APPS SCRIPT
+  // PEGA AQUÍ LA URL COMPLETA DE TU GOOGLE APPS SCRIPT
   const API_URL = "https://script.google.com/macros/s/AKfycbzUCe0DOIGirDZVdLPM1YVyeAXmyaApb8GPENOSpACUMOl9q29VUIkoNZ-7uqG3AAyh/exec";
 
   const GRADOS = ["6A", "6B", "7A", "7B", "8A", "8B", "9A", "9B", "10A", "10B", "11A", "11B"];
   let gradoActual = localStorage.getItem("app_grado") || "6A";
+
+  // ACTUALIZACIÓN DE RELOJ Y FECHA EN TIEMPO REAL
+  function actualizarReloj() {
+    const ahora = new Date();
+    const opcionesFecha = { weekday: 'long', day: 'numeric', month: 'short' };
+    document.getElementById("liveDate").innerText = ahora.toLocaleDateString("es-CO", opcionesFecha);
+    document.getElementById("liveClock").innerText = ahora.toLocaleTimeString("es-CO", { hour12: true });
+  }
+  setInterval(actualizarReloj, 1000);
+  actualizarReloj();
 
   function obtenerDeviceId() {
     let id = localStorage.getItem("app_device_id");
@@ -373,14 +350,14 @@
   };
 
   function renderizarPildorasGrados() {
-    const contenedor = document.getElementById("gradesScroll");
-    contenedor.innerHTML = "";
+    const cont = document.getElementById("gradesScroll");
+    cont.innerHTML = "";
     GRADOS.forEach(g => {
       const btn = document.createElement("button");
       btn.className = `grade-chip ${g === gradoActual ? "active" : ""}`;
       btn.innerText = g;
       btn.onclick = () => cambiarGrado(g);
-      contenedor.appendChild(btn);
+      cont.appendChild(btn);
     });
   }
 
@@ -397,7 +374,7 @@
     msg.style.display = "none";
 
     if (!tel) {
-      msg.innerText = "Escribe tu número de teléfono.";
+      msg.innerText = "Por favor escribe tu número registrado.";
       msg.style.display = "block";
       return;
     }
@@ -443,37 +420,38 @@
       mananaCiclo.classList.remove("loading-pulse");
 
       if (data.success) {
-        // 1. Mostrar estado de HOY
+        // 1. RENDER HOY
         hoyCiclo.innerText = data.hoy.diaCiclo;
+        const contHoy = document.getElementById("hoyContenido");
         
-        if (data.hoy.detalle && data.hoy.detalle.materias) {
-          renderChipsMaterias("hoyMaterias", data.hoy.detalle.materias);
+        if (data.hoy.esHabil && data.hoy.detalle && data.hoy.detalle.materias) {
+          contHoy.className = "subjects-list";
+          renderChipsMaterias(contHoy, data.hoy.detalle.materias);
         } else {
-          document.getElementById("hoyMaterias").innerHTML = 
-            `<span style="color:var(--muted); font-size:16px;">Descanso / Sin clases programadas para hoy.</span>`;
-        }
-        
-        const hNota = document.getElementById("hoyNota");
-        if (data.hoy.detalle && data.hoy.detalle.notas) {
-          hNota.innerHTML = `⚠️ ${data.hoy.detalle.notas}`;
-          hNota.style.display = "flex";
-        } else {
-          hNota.style.display = "none";
+          contHoy.className = "";
+          contHoy.innerHTML = `
+            <div class="receso-box">
+              <span style="font-size: 24px;">☕</span>
+              <span>Sin jornada académica hoy. Aprovecha para descansar o adelantar tareas.</span>
+            </div>`;
         }
 
-        // 2. Mostrar estado del PRÓXIMO DÍA HÁBIL
-        mananaCiclo.innerText = data.manana.diaCiclo;
-
+        // 2. RENDER PRÓXIMO DÍA HÁBIL
+        const diaNombre = data.manana.diaNombre ? data.manana.diaNombre.toUpperCase() : "PRÓXIMO DÍA";
+        document.getElementById("labelManana").innerText = `🎒 Para el ${diaNombre} (Prepara Maleta)`;
+        document.getElementById("mananaCiclo").innerText = data.manana.diaCiclo;
+        
+        const contManana = document.getElementById("mananaContenido");
         if (data.manana.detalle && data.manana.detalle.materias) {
-          renderChipsMaterias("mananaMaterias", data.manana.detalle.materias);
+          renderChipsMaterias(contManana, data.manana.detalle.materias);
         } else {
-          document.getElementById("mananaMaterias").innerHTML = 
-            `<span style="color:var(--muted); font-size:16px;">Sin clases registradas para el próximo día escolar.</span>`;
+          contManana.innerHTML = `<span style="color:var(--muted)">Sin materias registradas.</span>`;
         }
 
+        // Nota especial del próximo día
         const mNota = document.getElementById("mananaNota");
         if (data.manana.detalle && data.manana.detalle.notas) {
-          mNota.innerHTML = `🎒 Recuerda: ${data.manana.detalle.notas}`;
+          mNota.innerHTML = `📌 <b>Nota:</b> ${data.manana.detalle.notas}`;
           mNota.style.display = "flex";
         } else {
           mNota.style.display = "none";
@@ -487,15 +465,9 @@
     }
   }
 
-  function renderChipsMaterias(containerId, materiasTexto) {
-    const contenedor = document.getElementById(containerId);
+  function renderChipsMaterias(contenedor, materiasTexto) {
     contenedor.innerHTML = "";
-
-    if (!materiasTexto) {
-      contenedor.innerHTML = `<span style="color:var(--muted); font-size:16px;">Sin materias asignadas</span>`;
-      return;
-    }
-
+    if (!materiasTexto) return;
     const lista = materiasTexto.split(",").map(m => m.trim());
     lista.forEach(mat => {
       if (mat) {

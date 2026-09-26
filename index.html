@@ -116,12 +116,6 @@
 
     .btn-primary:active { transform: scale(0.98); background: var(--primary-dark); }
 
-    .btn-secondary {
-      background: #f1f5f9;
-      color: var(--muted);
-      margin-top: 10px;
-    }
-
     /* PANTALLA PRINCIPAL */
     .app-header {
       display: flex;
@@ -228,19 +222,13 @@
     .card-tomorrow .card-title { color: var(--accent); }
 
     .cycle-badge {
-      font-size: 34px;
+      font-size: 26px;
       font-weight: 900;
-      letter-spacing: -1px;
+      letter-spacing: -0.5px;
       margin-bottom: 14px;
       display: flex;
       align-items: baseline;
       gap: 8px;
-    }
-
-    .cycle-badge small {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--muted);
     }
 
     /* LISTA DE MATERIAS (CHIPS) */
@@ -323,7 +311,7 @@
   </div>
 
   <!-- VISTA 2: APLICACIÓN PRINCIPAL -->
-  <div id="appView" style="display:none; display:flex; flex-direction:column; gap:16px;">
+  <div id="appView" style="display:none; flex-direction:column; gap:16px;">
     
     <div class="app-header">
       <h3 id="saludo" class="user-greeting">Hola</h3>
@@ -332,9 +320,7 @@
 
     <!-- SELECTOR DE GRADOS HORIZONTAL (6A a 11B) -->
     <div class="grades-wrapper">
-      <div class="grades-scroll" id="gradesScroll">
-        <!-- Renderizado dinámico vía JavaScript -->
-      </div>
+      <div class="grades-scroll" id="gradesScroll"></div>
     </div>
 
     <!-- TARJETA HOY -->
@@ -350,7 +336,7 @@
     <!-- TARJETA MAÑANA -->
     <div class="card card-tomorrow">
       <div class="card-header">
-        <span class="card-title">🎒 Para Mañana (Prepara Maleta)</span>
+        <span class="card-title">🎒 Para el próximo día lectivo</span>
       </div>
       <div id="mananaCiclo" class="cycle-badge">...</div>
       <div id="mananaMaterias" class="subjects-list"></div>
@@ -457,9 +443,15 @@
       mananaCiclo.classList.remove("loading-pulse");
 
       if (data.success) {
-        // Render Hoy
-        hoyCiclo.innerHTML = `${data.hoy.diaCiclo}`;
-        renderChipsMaterias("hoyMaterias", data.hoy.detalle ? data.hoy.detalle.materias : null);
+        // 1. Mostrar estado de HOY
+        hoyCiclo.innerText = data.hoy.diaCiclo;
+        
+        if (data.hoy.detalle && data.hoy.detalle.materias) {
+          renderChipsMaterias("hoyMaterias", data.hoy.detalle.materias);
+        } else {
+          document.getElementById("hoyMaterias").innerHTML = 
+            `<span style="color:var(--muted); font-size:16px;">Descanso / Sin clases programadas para hoy.</span>`;
+        }
         
         const hNota = document.getElementById("hoyNota");
         if (data.hoy.detalle && data.hoy.detalle.notas) {
@@ -469,9 +461,15 @@
           hNota.style.display = "none";
         }
 
-        // Render Mañana
-        mananaCiclo.innerHTML = `${data.manana.diaCiclo}`;
-        renderChipsMaterias("mananaMaterias", data.manana.detalle ? data.manana.detalle.materias : null);
+        // 2. Mostrar estado del PRÓXIMO DÍA HÁBIL
+        mananaCiclo.innerText = data.manana.diaCiclo;
+
+        if (data.manana.detalle && data.manana.detalle.materias) {
+          renderChipsMaterias("mananaMaterias", data.manana.detalle.materias);
+        } else {
+          document.getElementById("mananaMaterias").innerHTML = 
+            `<span style="color:var(--muted); font-size:16px;">Sin clases registradas para el próximo día escolar.</span>`;
+        }
 
         const mNota = document.getElementById("mananaNota");
         if (data.manana.detalle && data.manana.detalle.notas) {
@@ -484,6 +482,8 @@
     } catch (e) {
       hoyCiclo.classList.remove("loading-pulse");
       mananaCiclo.classList.remove("loading-pulse");
+      hoyCiclo.innerText = "Error";
+      mananaCiclo.innerText = "Error";
     }
   }
 
@@ -492,11 +492,10 @@
     contenedor.innerHTML = "";
 
     if (!materiasTexto) {
-      contenedor.innerHTML = `<span style="color:var(--muted); font-size:16px;">Sin clases registradas</span>`;
+      contenedor.innerHTML = `<span style="color:var(--muted); font-size:16px;">Sin materias asignadas</span>`;
       return;
     }
 
-    // Separa por comas las materias y crea píldoras individuales
     const lista = materiasTexto.split(",").map(m => m.trim());
     lista.forEach(mat => {
       if (mat) {

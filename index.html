@@ -9,6 +9,7 @@
       --primary: #2563eb;
       --primary-dark: #1d4ed8;
       --accent: #f59e0b;
+      --accent-purple: #8b5cf6;
       --bg: #0f172a;
       --surface: #1e293b;
       --surface-card: #243248;
@@ -25,7 +26,7 @@
       background: linear-gradient(180deg, #0b1120 0%, #0f172a 100%);
       color: var(--text);
       margin: 0;
-      padding: 16px 14px 40px;
+      padding: 16px 14px 20px;
       display: flex;
       justify-content: center;
       min-height: 100vh;
@@ -39,7 +40,7 @@
       gap: 16px;
     }
 
-    /* BARRA TIEMPO REAL */
+    /* BARRA RELOJ */
     .live-bar {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -164,6 +165,39 @@
       box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
     }
 
+    /* CAJA CONSULTAR OTRA FECHA */
+    .consultar-fecha-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .consultar-fecha-box label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .input-date {
+      background: #0b1120;
+      border: 1px solid var(--border);
+      color: #38bdf8;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 10px;
+      outline: none;
+      cursor: pointer;
+    }
+
     /* TARJETAS */
     .card {
       background: var(--surface);
@@ -175,6 +209,7 @@
 
     .card-today { border-top: 5px solid #38bdf8; }
     .card-tomorrow { border-top: 5px solid var(--accent); }
+    .card-custom { border-top: 5px solid var(--accent-purple); }
 
     .card-label {
       font-size: 13px;
@@ -188,7 +223,7 @@
       align-items: center;
     }
 
-    /* BADGE DESTACADO DEL DÍA DE CICLO */
+    /* BADGES DE CICLO PEDAGÓGICO */
     .ciclo-tag {
       display: inline-flex;
       align-items: center;
@@ -198,7 +233,7 @@
       color: #60a5fa;
       padding: 6px 14px;
       border-radius: 20px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 800;
       letter-spacing: 0.5px;
       margin-bottom: 12px;
@@ -210,8 +245,14 @@
       color: #fbbf24;
     }
 
+    .ciclo-tag.purple {
+      background: rgba(139, 92, 246, 0.2);
+      border-color: rgba(139, 92, 246, 0.4);
+      color: #c084fc;
+    }
+
     .badge-cycle {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 900;
       margin-bottom: 12px;
       letter-spacing: -0.5px;
@@ -219,6 +260,7 @@
 
     .badge-today { color: #38bdf8; }
     .badge-tomorrow { color: var(--accent); }
+    .badge-custom { color: var(--accent-purple); }
 
     .subjects-list {
       display: flex;
@@ -274,6 +316,36 @@
       margin-top: 12px;
     }
 
+    /* PIE DE PÁGINA (ALL RIGHTS RESERVED + LOGO + DEVELOPED BY) */
+    .app-footer {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .developer-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: #cbd5e1;
+    }
+
+    .dev-icon {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+      vertical-align: middle;
+      border-radius: 4px;
+    }
+
     .loading-pulse {
       animation: pulse 1.5s infinite;
       opacity: 0.6;
@@ -300,7 +372,7 @@
     <div style="font-size: 50px; margin-bottom: 12px;">🎒</div>
     <h2 style="margin: 0 0 6px;">Horario Escolar</h2>
     <p style="color: var(--muted); margin: 0 0 20px;">Ingresa tu WhatsApp registrado para continuar:</p>
-    <input type="tel" id="telInput" class="input-field" placeholder="Ej: 3001234567">
+    <input type="tel" id="telInput" class="input-field" placeholder="Ej: 3001234567" inputmode="numeric">
     <button class="btn" onclick="iniciarSesion()">Consultar Horario</button>
     <div id="loginMsg" class="alerta" style="display:none;"></div>
   </div>
@@ -315,6 +387,29 @@
 
     <!-- PÍLDORAS DE GRADOS -->
     <div class="grades-scroll" id="gradesScroll"></div>
+
+    <!-- CONSULTAR OTRA FECHA -->
+    <div class="consultar-fecha-box">
+      <label for="fechaPicker">🔍 Ver otro día:</label>
+      <input type="date" id="fechaPicker" class="input-date" onchange="consultarOtraFecha(this.value)">
+    </div>
+
+    <!-- TARJETA FECHA CONSULTADA (DINÁMICA) -->
+    <div id="cardCustom" class="card card-custom" style="display:none;">
+      <div class="card-label">
+        <span id="labelCustom">📅 Fecha consultada</span>
+        <button onclick="cerrarConsultaCustom()" style="background:none; border:none; color:var(--muted); font-size:16px; cursor:pointer;">✖</button>
+      </div>
+
+      <div id="tagCicloCustom" class="ciclo-tag purple" style="display:none;">
+        <span>🔄 CICLO PEDAGÓGICO:</span>
+        <b id="tagCicloCustomTexto">DÍA 1</b>
+      </div>
+
+      <div id="customCiclo" class="badge-cycle badge-custom">...</div>
+      <div id="customContenido" class="subjects-list"></div>
+      <div id="customNota" class="note-box" style="display:none;"></div>
+    </div>
 
     <!-- TARJETA HOY -->
     <div class="card card-today">
@@ -352,11 +447,21 @@
 
   </div>
 
+  <!-- PIE DE PÁGINA PROFESIONAL -->
+  <footer class="app-footer">
+    <span>All rights reserved &copy; 2026</span>
+    <div class="developer-line">
+      <!-- Asegúrate de tener el logo guardado como logo.png en tu repositorio -->
+      <img src="logo.png" alt="DemonFlex180 Logo" class="dev-icon" onerror="this.style.display='none'">
+      <span>Developed by DemonFlex180</span>
+    </div>
+  </footer>
+
 </div>
 
 <script>
-  // PEGA AQUÍ LA URL COMPLETA DE TU GOOGLE APPS SCRIPT
-  const API_URL = "https://script.google.com/macros/s/AKfycbzBOJvFpH90kwBYwQWFicBkvOxuDCjYBO6LS-eEXrcafwtVUOGT8I_nsGhPQCsmczxD/exec";
+  // PEGA AQUÍ LA URL COMPLETA DE TU APPS SCRIPT
+  const API_URL = "https://script.google.com/macros/s/AKfycby0iFlatbGPwgh_kTmEgeiudVoaWCIE0rkPrb5CtqRzWEv-1jStCgHZnaRDqcZ70ofK/exec";
 
   const GRADOS = ["6A", "6B", "7A", "7B", "8A", "8B", "9A", "9B", "10A", "10B", "11A", "11B"];
   let gradoActual = localStorage.getItem("app_grado") || "6A";
@@ -405,6 +510,11 @@
     localStorage.setItem("app_grado", gradoActual);
     renderizarPildorasGrados();
     actualizarHorario();
+
+    const pickerVal = document.getElementById("fechaPicker").value;
+    if (pickerVal) {
+      consultarOtraFecha(pickerVal);
+    }
   }
 
   async function iniciarSesion() {
@@ -521,6 +631,66 @@
       hoyCiclo.innerText = "Error";
       mananaCiclo.innerText = "Error";
     }
+  }
+
+  // CONSULTA DINÁMICA DE CUALQUIER DÍA
+  async function consultarOtraFecha(fechaStr) {
+    if (!fechaStr) return;
+    const card = document.getElementById("cardCustom");
+    const cicloBadge = document.getElementById("customCiclo");
+    card.style.display = "block";
+    cicloBadge.classList.add("loading-pulse");
+
+    try {
+      const res = await fetch(`${API_URL}?action=consultar_fecha&fecha=${encodeURIComponent(fechaStr)}&grado=${encodeURIComponent(gradoActual)}`);
+      const data = await res.json();
+      cicloBadge.classList.remove("loading-pulse");
+
+      if (data.success) {
+        document.getElementById("labelCustom").innerText = `📅 ${data.diaNombre.toUpperCase()} (${data.fecha})`;
+        const tag = document.getElementById("tagCicloCustom");
+        const cont = document.getElementById("customContenido");
+
+        if (data.esHabil && data.numDia > 0) {
+          tag.style.display = "inline-flex";
+          document.getElementById("tagCicloCustomTexto").innerText = `DÍA ${data.numDia}`;
+          cicloBadge.innerText = `Horario Día ${data.numDia}`;
+
+          if (data.detalle && data.detalle.materias) {
+            cont.className = "subjects-list";
+            renderChipsMaterias(cont, data.detalle.materias);
+          } else {
+            cont.className = "";
+            cont.innerHTML = `<span style="color:var(--muted)">Sin materias registradas para este grado.</span>`;
+          }
+        } else {
+          tag.style.display = "none";
+          cicloBadge.innerText = data.estado;
+          cont.className = "";
+          cont.innerHTML = `
+            <div class="receso-box">
+              <span style="font-size: 24px;">ℹ️</span>
+              <span>${data.estado}: No hay clases lectivas programadas en esta fecha.</span>
+            </div>`;
+        }
+
+        const nota = document.getElementById("customNota");
+        if (data.detalle && data.detalle.notas) {
+          nota.innerHTML = `📌 <b>Nota:</b> ${data.detalle.notas}`;
+          nota.style.display = "flex";
+        } else {
+          nota.style.display = "none";
+        }
+      }
+    } catch (e) {
+      cicloBadge.classList.remove("loading-pulse");
+      cicloBadge.innerText = "Error al consultar";
+    }
+  }
+
+  function cerrarConsultaCustom() {
+    document.getElementById("cardCustom").style.display = "none";
+    document.getElementById("fechaPicker").value = "";
   }
 
   function renderChipsMaterias(contenedor, materiasTexto) {

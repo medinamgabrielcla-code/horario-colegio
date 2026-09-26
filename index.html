@@ -76,7 +76,6 @@
       padding: 32px 24px;
       border-radius: var(--radius);
       text-align: center;
-      margin-top: 10px;
       border: 1px solid var(--border);
       box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     }
@@ -108,15 +107,11 @@
       background: var(--primary);
       color: white;
       transition: 0.2s;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      text-decoration: none;
     }
 
     .btn:active { transform: scale(0.98); background: var(--primary-dark); }
 
-    /* TARJETA CONTACTO PARA COMPRAR ACCESO */
+    /* TARJETA CONTACTO / COMPRAR ACCESO */
     .contact-card {
       background: rgba(30, 41, 59, 0.7);
       border: 1px dashed #38bdf8;
@@ -126,17 +121,12 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.05);
     }
 
     .contact-title {
       font-size: 16px;
       font-weight: 800;
       color: #38bdf8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
     }
 
     .contact-desc {
@@ -165,7 +155,7 @@
       font-weight: 700;
       font-size: 14px;
       text-decoration: none;
-      transition: 0.2s;
+      display: inline-block;
     }
 
     .btn-contact:active { background: #0369a1; }
@@ -223,7 +213,7 @@
       box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
     }
 
-    /* CAJA CONSULTAR OTRA FECHA */
+    /* BUSCADOR DE FECHA */
     .consultar-fecha-box {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -239,9 +229,6 @@
       font-size: 14px;
       font-weight: 700;
       color: #cbd5e1;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
     .input-date {
@@ -256,7 +243,7 @@
       cursor: pointer;
     }
 
-    /* TARJETAS DE CONTENIDO */
+    /* TARJETAS */
     .card {
       background: var(--surface);
       border-radius: var(--radius);
@@ -281,7 +268,7 @@
       align-items: center;
     }
 
-    /* BADGES DE CICLO PEDAGÓGICO */
+    /* BADGES */
     .ciclo-tag {
       display: inline-flex;
       align-items: center;
@@ -293,7 +280,6 @@
       border-radius: 20px;
       font-size: 13px;
       font-weight: 800;
-      letter-spacing: 0.5px;
       margin-bottom: 12px;
     }
 
@@ -313,7 +299,6 @@
       font-size: 26px;
       font-weight: 900;
       margin-bottom: 12px;
-      letter-spacing: -0.5px;
     }
 
     .badge-today { color: #38bdf8; }
@@ -375,7 +360,7 @@
       line-height: 1.4;
     }
 
-    /* PIE DE PÁGINA (ALL RIGHTS RESERVED + LOGO + DEVELOPED BY) */
+    /* FOOTER */
     .app-footer {
       margin-top: 24px;
       padding-top: 16px;
@@ -426,9 +411,8 @@
     <div id="liveClock" class="live-clock">--:--:--</div>
   </div>
 
-  <!-- VISTA 1: LOGIN Y REGISTRO -->
+  <!-- VISTA 1: LOGIN -->
   <div id="loginView" style="display:flex; flex-direction:column; gap:16px;">
-    
     <div class="login-card">
       <div style="font-size: 50px; margin-bottom: 12px;">🎒</div>
       <h2 style="margin: 0 0 6px;">Horario Escolar</h2>
@@ -438,11 +422,9 @@
       <div id="loginMsg" class="alerta" style="display:none;"></div>
     </div>
 
-    <!-- TARJETA INFORMATIVA PARA COMPRAR ACCESO -->
+    <!-- TARJETA CONTACTO -->
     <div class="contact-card">
-      <div class="contact-title">
-        <span>✨ ¿Aún no tienes acceso a la app?</span>
-      </div>
+      <div class="contact-title">✨ ¿Aún no tienes acceso a la app?</div>
       <p class="contact-desc">
         Para activar tu número y tener tu horario escolar automatizado (válido para 2 celulares):
       </p>
@@ -453,10 +435,9 @@
         ✉️ Contactar vía Correo
       </a>
     </div>
-
   </div>
 
-  <!-- VISTA 2: HORARIO PRINCIPAL -->
+  <!-- VISTA 2: HORARIO -->
   <div id="appView" style="display:none; flex-direction:column; gap:16px;">
     
     <div class="app-header">
@@ -467,13 +448,13 @@
     <!-- PÍLDORAS DE GRADOS -->
     <div class="grades-scroll" id="gradesScroll"></div>
 
-    <!-- CONSULTAR OTRA FECHA -->
+    <!-- SELECTOR DE FECHA -->
     <div class="consultar-fecha-box">
       <label for="fechaPicker">🔍 Ver otro día:</label>
       <input type="date" id="fechaPicker" class="input-date" onchange="consultarOtraFecha(this.value)">
     </div>
 
-    <!-- TARJETA FECHA CONSULTADA (DINÁMICA) -->
+    <!-- TARJETA FECHA CONSULTADA -->
     <div id="cardCustom" class="card card-custom" style="display:none;">
       <div class="card-label">
         <span id="labelCustom">📅 Fecha consultada</span>
@@ -526,7 +507,7 @@
 
   </div>
 
-  <!-- PIE DE PÁGINA PROFESIONAL -->
+  <!-- FOOTER -->
   <footer class="app-footer">
     <span>All rights reserved &copy; 2026</span>
     <div class="developer-line">
@@ -539,7 +520,7 @@
 
 <script>
   // PEGA AQUÍ LA URL COMPLETA DE TU APPS SCRIPT TERMINADA EN /exec
-  const API_URL = "https://script.google.com/macros/s/AKfycbzoEqcgd141baKF4SMn0vkwGOUK4pZAdVnpPoZ8u5uB5yr7a9I7hWc4huIOmDdB9dG2/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbyMEF7U3YE8eEgTIcQX2GEDDDRPqxJp91pgO-E49eitqm5VVbX9lz6vcr32lC6hQfRn/exec";
 
   const GRADOS = ["6A", "6B", "7A", "7B", "8A", "8B", "9A", "9B", "10A", "10B", "11A", "11B"];
   let gradoActual = localStorage.getItem("app_grado") || "6A";
@@ -692,7 +673,7 @@
         if (data.manana.detalle && data.manana.detalle.materias) {
           renderChipsMaterias(contManana, data.manana.detalle.materias);
         } else {
-          contManana.innerHTML = `<span style="color:var(--muted)">Sin materias registradas.</span>`;
+          contManana.innerHTML = `<span style="color:var(--muted)">Sin materias registradas. (Código diagnóstico: ${data.manana.numDia})</span>`;
         }
 
         const mNota = document.getElementById("mananaNota");
@@ -711,7 +692,7 @@
     }
   }
 
-  // CONSULTA DE FECHA ESPECÍFICA
+  // CONSULTA DE OTRA FECHA
   async function consultarOtraFecha(fechaStr) {
     if (!fechaStr) return;
     const card = document.getElementById("cardCustom");

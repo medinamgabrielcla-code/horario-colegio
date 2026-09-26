@@ -39,7 +39,7 @@
       gap: 16px;
     }
 
-    /* BARRA EN VIVO CON RELOJ Y FECHA */
+    /* BARRA TIEMPO REAL */
     .live-bar {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -134,7 +134,7 @@
       text-decoration: underline;
     }
 
-    /* SELECTOR DE GRADOS DESLIZABLE */
+    /* SELECTOR DE GRADOS */
     .grades-scroll {
       display: flex;
       gap: 8px;
@@ -177,21 +177,43 @@
     .card-tomorrow { border-top: 5px solid var(--accent); }
 
     .card-label {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 800;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 6px;
+    }
+
+    /* BADGE DESTACADO DEL DÍA DE CICLO */
+    .ciclo-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(37, 99, 235, 0.2);
+      border: 1px solid rgba(37, 99, 235, 0.4);
+      color: #60a5fa;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .ciclo-tag.accent {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: rgba(245, 158, 11, 0.4);
+      color: #fbbf24;
     }
 
     .badge-cycle {
-      font-size: 30px;
+      font-size: 28px;
       font-weight: 900;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       letter-spacing: -0.5px;
     }
 
@@ -278,7 +300,7 @@
     <div style="font-size: 50px; margin-bottom: 12px;">🎒</div>
     <h2 style="margin: 0 0 6px;">Horario Escolar</h2>
     <p style="color: var(--muted); margin: 0 0 20px;">Ingresa tu WhatsApp registrado para continuar:</p>
-    <input type="tel" id="telInput" class="input-field" placeholder="Ej: 3001234567" inputmode="numeric">
+    <input type="tel" id="telInput" class="input-field" placeholder="Ej: 3001234567">
     <button class="btn" onclick="iniciarSesion()">Consultar Horario</button>
     <div id="loginMsg" class="alerta" style="display:none;"></div>
   </div>
@@ -296,7 +318,16 @@
 
     <!-- TARJETA HOY -->
     <div class="card card-today">
-      <div class="card-label">☀️ Estado de Hoy</div>
+      <div class="card-label">
+        <span>☀️ Estado de Hoy</span>
+        <span id="fechaHoyBadge" style="font-size: 12px; color: var(--muted);"></span>
+      </div>
+      
+      <div id="tagCicloHoy" class="ciclo-tag" style="display:none;">
+        <span>🔄 CICLO PEDAGÓGICO:</span>
+        <b id="tagCicloHoyTexto">DÍA 1</b>
+      </div>
+
       <div id="hoyCiclo" class="badge-cycle badge-today">Cargando...</div>
       <div id="hoyContenido"></div>
       <div id="hoyNota" class="note-box" style="display:none;"></div>
@@ -304,7 +335,16 @@
 
     <!-- TARJETA PRÓXIMO DÍA HÁBIL -->
     <div class="card card-tomorrow">
-      <div class="card-label" id="labelManana">🎒 Próximo Día Lectivo</div>
+      <div class="card-label">
+        <span id="labelManana">🎒 Próximo Día Lectivo</span>
+        <span id="fechaMananaBadge" style="font-size: 12px; color: var(--muted);"></span>
+      </div>
+
+      <div id="tagCicloManana" class="ciclo-tag accent" style="display:none;">
+        <span>🔄 CICLO PEDAGÓGICO:</span>
+        <b id="tagCicloMananaTexto">DÍA 1</b>
+      </div>
+
       <div id="mananaCiclo" class="badge-cycle badge-tomorrow">Cargando...</div>
       <div id="mananaContenido" class="subjects-list"></div>
       <div id="mananaNota" class="note-box" style="display:none;"></div>
@@ -316,12 +356,11 @@
 
 <script>
   // PEGA AQUÍ LA URL COMPLETA DE TU GOOGLE APPS SCRIPT
-  const API_URL = "https://script.google.com/macros/s/AKfycbzUCe0DOIGirDZVdLPM1YVyeAXmyaApb8GPENOSpACUMOl9q29VUIkoNZ-7uqG3AAyh/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbyR6w2jS9HekR4jN2pD6-wU5gX7-6kY1yqC/exec";
 
   const GRADOS = ["6A", "6B", "7A", "7B", "8A", "8B", "9A", "9B", "10A", "10B", "11A", "11B"];
   let gradoActual = localStorage.getItem("app_grado") || "6A";
 
-  // ACTUALIZACIÓN DE RELOJ Y FECHA EN TIEMPO REAL
   function actualizarReloj() {
     const ahora = new Date();
     const opcionesFecha = { weekday: 'long', day: 'numeric', month: 'short' };
@@ -421,9 +460,19 @@
 
       if (data.success) {
         // 1. RENDER HOY
-        hoyCiclo.innerText = data.hoy.diaCiclo;
-        const contHoy = document.getElementById("hoyContenido");
+        document.getElementById("fechaHoyBadge").innerText = data.hoy.fecha;
+        const tagHoy = document.getElementById("tagCicloHoy");
         
+        if (data.hoy.esHabil && data.hoy.numDia > 0) {
+          tagHoy.style.display = "inline-flex";
+          document.getElementById("tagCicloHoyTexto").innerText = `DÍA ${data.hoy.numDia}`;
+          hoyCiclo.innerText = `Horario Día ${data.hoy.numDia}`;
+        } else {
+          tagHoy.style.display = "none";
+          hoyCiclo.innerText = data.hoy.diaCiclo;
+        }
+
+        const contHoy = document.getElementById("hoyContenido");
         if (data.hoy.esHabil && data.hoy.detalle && data.hoy.detalle.materias) {
           contHoy.className = "subjects-list";
           renderChipsMaterias(contHoy, data.hoy.detalle.materias);
@@ -437,10 +486,20 @@
         }
 
         // 2. RENDER PRÓXIMO DÍA HÁBIL
+        document.getElementById("fechaMananaBadge").innerText = data.manana.fecha;
         const diaNombre = data.manana.diaNombre ? data.manana.diaNombre.toUpperCase() : "PRÓXIMO DÍA";
         document.getElementById("labelManana").innerText = `🎒 Para el ${diaNombre} (Prepara Maleta)`;
-        document.getElementById("mananaCiclo").innerText = data.manana.diaCiclo;
-        
+
+        const tagManana = document.getElementById("tagCicloManana");
+        if (data.manana.numDia > 0) {
+          tagManana.style.display = "inline-flex";
+          document.getElementById("tagCicloMananaTexto").innerText = `DÍA ${data.manana.numDia}`;
+          mananaCiclo.innerText = `Horario Día ${data.manana.numDia}`;
+        } else {
+          tagManana.style.display = "none";
+          mananaCiclo.innerText = data.manana.diaCiclo;
+        }
+
         const contManana = document.getElementById("mananaContenido");
         if (data.manana.detalle && data.manana.detalle.materias) {
           renderChipsMaterias(contManana, data.manana.detalle.materias);
@@ -448,7 +507,6 @@
           contManana.innerHTML = `<span style="color:var(--muted)">Sin materias registradas.</span>`;
         }
 
-        // Nota especial del próximo día
         const mNota = document.getElementById("mananaNota");
         if (data.manana.detalle && data.manana.detalle.notas) {
           mNota.innerHTML = `📌 <b>Nota:</b> ${data.manana.detalle.notas}`;
